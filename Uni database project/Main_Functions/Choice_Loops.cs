@@ -1,27 +1,30 @@
-﻿using Uni_database_project.Database_Operations;
+﻿using Uni_database_project.Classes;
+using Uni_database_project.Database_Operations;
 using Uni_database_project.Student_Functions;
 
 namespace Uni_database_project.Main_Functions
 {
     public class Choice_Loops
     {
-        private Student_List data;
         private Write_Read_To_CSV ToCSV;
         private Student_Creation Creation;
         private Student_Search Search;
         private Student_Sort Sort;
-        
+        private Student_Update Update;
+
         public Choice_Loops(
             Write_Read_To_CSV toCSV,
             Student_Creation creation,
             Student_Search search,
-            Student_Sort sort
+            Student_Sort sort,
+            Student_Update update
             )
         {
             this.ToCSV = toCSV;
             this.Creation = creation;
             this.Search = search;
             this.Sort = sort;
+            this.Update = update;
         }
 
         public async Task StudentManagement()
@@ -42,6 +45,7 @@ namespace Uni_database_project.Main_Functions
                     "5. Search by Name\n" +
                     "6. Sort by PESEL number\n" +
                     "7. Sort by Name\n" +
+                    "8. Update Student info\n" +
                     "0. Exit\n" +
                     "-------------------------------\n" +
                     "Enter your choice:");
@@ -84,6 +88,11 @@ namespace Uni_database_project.Main_Functions
                         Sort.SortByName();
                         await ToCSV.WriteToCSV();
                         break;
+                    case 8: 
+                        Update.StudentUpdate();
+                        await ToCSV.WriteToCSV();
+                        break;
+
                     case 0:
                         return;
                      default:
@@ -93,7 +102,5 @@ namespace Uni_database_project.Main_Functions
             }
             
         }
-
-
     }
 }

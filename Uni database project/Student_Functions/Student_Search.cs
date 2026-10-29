@@ -44,7 +44,7 @@ namespace Uni_database_project.Student_Functions
 
                 if(string.IsNullOrWhiteSpace(searchPESEL))
                 {
-                    Console.WriteLine("!!! First name cannot be empty !!!");
+                    Console.WriteLine("!!! Stirng cannot be empty !!!");
                     continue;
                 }
 

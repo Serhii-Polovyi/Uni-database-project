@@ -120,6 +120,7 @@ namespace Uni_database_project.Student_Functions
                 while (!int.TryParse(Console.ReadLine(), out studentID))
                 {
                     Console.WriteLine("!!! Wrong input for ID! try again !!!");
+                    continue;
                 }
 
                 if (int.IsNegative(studentID))
@@ -155,6 +156,16 @@ namespace Uni_database_project.Student_Functions
                     Console.WriteLine("!!! Incorrect input! the string contains non numbers !!!");
                     continue;
                 }
+
+                foreach (var student in Data.Database)
+                {
+                    if (student.PESEL_Number == PESEL_number)
+                    {
+                        Console.WriteLine("!!! PESEL matches already existing one !!!");
+                        continue;
+                    }
+                }
+
                 if (CheckPESEL(PESEL_number) == true)
                 {
                     return PESEL_number;
