@@ -24,6 +24,11 @@ Student_Sort Sort = new Student_Sort(Data);
 
 Student_Update Update = new Student_Update(Data, Search, DataAsk);
 
+Update_Choice_loop UpdateLoop = new Update_Choice_loop();
+
+Update.UpdLoop = UpdateLoop;
+UpdateLoop.StuUpdate = Update;
+
 Choice_Loops ChoiceL = new Choice_Loops(Write, Creation, Search, Sort, Update);
 
 await ChoiceL.StudentManagement();

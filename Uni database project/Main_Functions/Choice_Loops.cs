@@ -52,7 +52,9 @@ namespace Uni_database_project.Main_Functions
                 int choice;
                 while (!int.TryParse(Console.ReadLine(), out choice))
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("!!! Wrong input for this opertaion! try again !!!");
+                    Console.ResetColor();
                 }
 
                 switch (choice)
@@ -96,7 +98,9 @@ namespace Uni_database_project.Main_Functions
                     case 0:
                         return;
                      default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("!!! Something went wrong !!!");
+                        Console.ResetColor();
                         break;
                 }
             }

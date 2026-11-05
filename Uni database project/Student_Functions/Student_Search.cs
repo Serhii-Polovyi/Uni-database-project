@@ -19,7 +19,9 @@ namespace Uni_database_project.Student_Functions
 
             if (Data.Database.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("!!! No students found !!!");
+                Console.ResetColor();
                 return;
             }
 
@@ -44,7 +46,9 @@ namespace Uni_database_project.Student_Functions
 
                 if(string.IsNullOrWhiteSpace(searchPESEL))
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("!!! Stirng cannot be empty !!!");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -73,7 +77,9 @@ namespace Uni_database_project.Student_Functions
 
                 if (string.IsNullOrWhiteSpace(searchName))
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("!!! First name cannot be empty !!!");
+                    Console.ResetColor();
                     continue;
                 }
 
@@ -101,6 +107,7 @@ namespace Uni_database_project.Student_Functions
                     $"Gender: {student.SelectedGender}\n" +
                     $"Adress: {student.Adress}\n" +
                     $"PESEL: {student.PESEL_Number}\n" +
+                    $"Grade: {student.Grade}\n" +
                     $"---------------------------------------\n"
                     );
         }

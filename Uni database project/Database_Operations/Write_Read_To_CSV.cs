@@ -27,26 +27,30 @@ namespace Uni_database_project.Database_Operations
                 );
 
             await writer.WriteLineAsync(
-                "Student ID," +
-                "First name," +
-                "Last name," +
-                "Gender," +
-                "Adress," +
-                "PESEL number");
+                "Student ID." +
+                "First name." +
+                "Last name." +
+                "Gender." +
+                "Adress." +
+                "PESEL number." +
+                "Grade");
 
             foreach (var student in Data.Database)
             {
                 await writer.WriteLineAsync($"{student}");
             }
-
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("!!! Students saved to CSV !!!");
+            Console.ResetColor();
         }
 
         public async Task ReadFromCSV()
         {
             if (!File.Exists("Student_Data.csv"))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("!!! No saved student data found !!!");
+                Console.ResetColor();
                 return;
             }
 
@@ -56,9 +60,9 @@ namespace Uni_database_project.Database_Operations
 
             foreach (string line in buffer.Skip(1))
             {
-                string[] parts = line.Split(',');
+                string[] parts = line.Split('.');
 
-                if (parts.Length != 6)
+                if (parts.Length != 7)
                     continue;
 
                 Student_Class student = new Student_Class(
@@ -68,12 +72,14 @@ namespace Uni_database_project.Database_Operations
                     parts[2],
                     Enum.Parse<Gender>(parts[3], true),
                     parts[4],
-                    parts[5]
+                    parts[5],
+                    Convert.ToDouble(parts[6])
                     );
                 Data.Database.Add(student);
             }
-
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("!!! Students loaded from the file !!!");
+            Console.ResetColor();
         }
     }
 }

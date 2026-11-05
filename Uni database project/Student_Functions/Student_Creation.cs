@@ -29,9 +29,13 @@ namespace Uni_database_project.Student_Functions
 
             string PESEL_number = DataAsk.TakePESEL();
 
+            double grade = DataAsk.TakeGrade();
 
-            Data.Database.Add(new Student_Class(studentID, firstName, lastName, selectedGender, adress, PESEL_number));
+
+            Data.Database.Add(new Student_Class(studentID, firstName, lastName, selectedGender, adress, PESEL_number, grade));
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("!!! Student Added !!!");
+            Console.ResetColor();
         }
 
         public void RemoveStudent()

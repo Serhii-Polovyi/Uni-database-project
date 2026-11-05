@@ -9,6 +9,8 @@ namespace Uni_database_project.Student_Functions
 {
     public class Student_Update
     {
+
+        public Update_Choice_loop UpdLoop { get; set; }
         private Student_List DataList;
         private Student_Search Search;
         private Student_Data_Ask DataAsk;
@@ -22,6 +24,7 @@ namespace Uni_database_project.Student_Functions
             this.DataList = dataList;
             this.Search = search;
             this.DataAsk = dataAsk;
+
         }
 
         public void StudentUpdate()
@@ -33,7 +36,9 @@ namespace Uni_database_project.Student_Functions
             int searchID;
             while (!int.TryParse(Console.ReadLine(), out searchID))
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("!!! Wrong input for ID! try again !!!");
+                Console.ResetColor();
                 continue;
             }
 
@@ -47,7 +52,7 @@ namespace Uni_database_project.Student_Functions
                     Search.DisplayInfo(student);
                     while (true)
                     {
-                        UpdateChoice(student);
+                        UpdLoop.UpdateChoice(student);
 
 
                         Console.WriteLine("you want to exit? y/n");
@@ -87,49 +92,9 @@ namespace Uni_database_project.Student_Functions
             student.PESEL_Number = DataAsk.TakePESEL();
         }
 
-        public void UpdateChoice(Student_Class student)
+        public void UpdateGrade(Student_Class student)
         {
-            Console.WriteLine(
-                    "_______________________________\n" +
-                    "Options available:\n" +
-                    "-------------------------------\n" +
-                    "1. Change First Name \n" +
-                    "2. Change Last Name \n" +
-                    "3. Change Gemder \n" +
-                    "4. Change Adress \n" +
-                    "5. Change PESEL \n" +
-                    "0. Exit\n" +
-                    "-------------------------------\n" +
-                    "Enter your choice:");
-            int choice;
-            while (!int.TryParse(Console.ReadLine(), out choice))
-            {
-                Console.WriteLine("!!! Wrong input for this opertaion! try again !!!");
-            }
-
-            switch (choice)
-            {
-                case 1:
-                    UpdateFirstName(student);
-                    break;
-                case 2:
-                    UpdateLastName(student);
-                    break;
-                case 3:
-                    UpdateGender(student);
-                    break;
-                case 4:
-                    UpdateAdress(student);
-                    break;
-                case 5: 
-                    UpdatePesel(student);
-                    break;
-                case 0:
-                        return;
-                    default:
-                        Console.WriteLine("!!! Something went wrong !!!");
-                        break;
-                    }
+            student.Grade = DataAsk.TakeGrade();
         }
 
     }

@@ -21,8 +21,9 @@
         public Gender SelectedGender { get; set; }
         public string Adress { get; set; }
         public string PESEL_Number { get; set; }
+        public double Grade { get; set; }
 
-        public Student_Class(int studentID, string firstName, string lastName, Gender selectedGender, string adress, string pESEL_Number)
+        public Student_Class(int studentID, string firstName, string lastName, Gender selectedGender, string adress, string pESEL_Number, double grade)
         {
             StudentID = studentID;
             FirstName = firstName;
@@ -30,11 +31,12 @@
             SelectedGender = selectedGender;
             Adress = adress;
             PESEL_Number = pESEL_Number;
+            Grade = grade;
         }
 
         public override string ToString()
         {
-            return $"{StudentID},{FirstName},{LastName},{SelectedGender},{Adress},{PESEL_Number}";
+            return $"{StudentID}.{FirstName}.{LastName}.{SelectedGender}.{Adress}.{PESEL_Number}.{Grade}";
         }
     }
 
