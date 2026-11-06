@@ -6,6 +6,7 @@ namespace Uni_database_project.Main_Functions
 {
     public class Choice_Loops
     {
+        private ErrorMessages ErrorMsg;
         private Write_Read_To_CSV ToCSV;
         private Student_Creation Creation;
         private Student_Search Search;
@@ -13,6 +14,7 @@ namespace Uni_database_project.Main_Functions
         private Student_Update Update;
 
         public Choice_Loops(
+            ErrorMessages errorMsg,
             Write_Read_To_CSV toCSV,
             Student_Creation creation,
             Student_Search search,
@@ -20,6 +22,7 @@ namespace Uni_database_project.Main_Functions
             Student_Update update
             )
         {
+            this.ErrorMsg = errorMsg;
             this.ToCSV = toCSV;
             this.Creation = creation;
             this.Search = search;
@@ -52,9 +55,7 @@ namespace Uni_database_project.Main_Functions
                 int choice;
                 while (!int.TryParse(Console.ReadLine(), out choice))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Wrong input for this opertaion! try again !!!");
-                    Console.ResetColor();
+                    ErrorMsg.WrongChoiceInput();
                 }
 
                 switch (choice)
@@ -98,9 +99,7 @@ namespace Uni_database_project.Main_Functions
                     case 0:
                         return;
                      default:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("!!! Something went wrong !!!");
-                        Console.ResetColor();
+                        ErrorMsg.GenericError();
                         break;
                 }
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Uni_database_project.Classes;
+using Uni_database_project.Main_Functions;
 using Uni_database_project.Student_Functions;
 
 namespace Uni_database_project.Database_Operations
@@ -9,11 +10,13 @@ namespace Uni_database_project.Database_Operations
     public class Write_Read_To_CSV
     {
 
-        private Student_List Data;
+        private Student_List DataList;
+        private ErrorMessages ErrorMsg;
 
-        public Write_Read_To_CSV(Student_List data) 
+        public Write_Read_To_CSV(Student_List dataList, ErrorMessages errormMsg) 
         {
-            this.Data = data;
+            this.DataList = dataList;
+            this.ErrorMsg = errormMsg;
         }
 
 
@@ -27,40 +30,37 @@ namespace Uni_database_project.Database_Operations
                 );
 
             await writer.WriteLineAsync(
-                "Student ID." +
-                "First name." +
-                "Last name." +
-                "Gender." +
-                "Adress." +
-                "PESEL number." +
+                "Student ID~" +
+                "First name~" +
+                "Last name~" +
+                "Gender~" +
+                "Adress~" +
+                "PESEL number~" +
                 "Grade");
 
-            foreach (var student in Data.Database)
+            foreach (var student in DataList.Database)
             {
                 await writer.WriteLineAsync($"{student}");
             }
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("!!! Students saved to CSV !!!");
-            Console.ResetColor();
+
+            ErrorMsg.SaveSuccess();
         }
 
         public async Task ReadFromCSV()
         {
             if (!File.Exists("Student_Data.csv"))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("!!! No saved student data found !!!");
-                Console.ResetColor();
+                ErrorMsg.NoStudentDataFound();
                 return;
             }
 
             string[] buffer = await File.ReadAllLinesAsync("Student_Data.csv");
 
-            Data.Database.Clear();
+            DataList.Database.Clear();
 
             foreach (string line in buffer.Skip(1))
             {
-                string[] parts = line.Split('.');
+                string[] parts = line.Split('~');
 
                 if (parts.Length != 7)
                     continue;
@@ -75,11 +75,9 @@ namespace Uni_database_project.Database_Operations
                     parts[5],
                     Convert.ToDouble(parts[6])
                     );
-                Data.Database.Add(student);
+                DataList.Database.Add(student);
             }
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("!!! Students loaded from the file !!!");
-            Console.ResetColor();
+            ErrorMsg.StudentLoadSuccess();
         }
     }
 }

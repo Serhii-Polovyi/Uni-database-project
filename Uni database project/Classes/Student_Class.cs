@@ -36,7 +36,7 @@
 
         public override string ToString()
         {
-            return $"{StudentID}.{FirstName}.{LastName}.{SelectedGender}.{Adress}.{PESEL_Number}.{Grade}";
+            return $"{StudentID}~{FirstName}~{LastName}~{SelectedGender}~{Adress}~{PESEL_Number}~{Grade}";
         }
     }
 

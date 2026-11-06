@@ -8,8 +8,13 @@ namespace Uni_database_project.Main_Functions
 {
     public class Update_Choice_loop
     {
-
+        private ErrorMessages ErrorMsg;
         public Student_Update StuUpdate { get; set; }
+
+        public Update_Choice_loop(ErrorMessages errorMsg) 
+        {
+            this.ErrorMsg = errorMsg;
+        }
 
         public void UpdateChoice(Student_Class student)
         {
@@ -29,9 +34,7 @@ namespace Uni_database_project.Main_Functions
             int choice;
             while (!int.TryParse(Console.ReadLine(), out choice))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("!!! Wrong input for this opertaion! try again !!!");
-                Console.ForegroundColor = ConsoleColor.Red;
+                ErrorMsg.WrongChoiceInput();
             }
 
             switch (choice)
@@ -57,9 +60,7 @@ namespace Uni_database_project.Main_Functions
                 case 0:
                     return;
                 default:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Something went wrong !!!");
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    ErrorMsg.GenericError();
                     break;
             }
         }

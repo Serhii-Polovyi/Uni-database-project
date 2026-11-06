@@ -1,17 +1,20 @@
 ﻿using System.Text;
 using Uni_database_project.Classes;
 using Uni_database_project.Database_Operations;
+using Uni_database_project.Main_Functions;
 
 namespace Uni_database_project.Student_Functions
 {
     
     public class Student_Creation
     {
+        private ErrorMessages ErrorMsg;
         private Student_Data_Ask DataAsk;
-        private Student_List Data;
-        public Student_Creation(Student_List data, Student_Data_Ask dataAsk)
+        private Student_List DataList;
+        public Student_Creation(ErrorMessages errorMsg, Student_List dataList, Student_Data_Ask dataAsk)
         {
-            this.Data = data;
+            this.ErrorMsg = errorMsg;
+            this.DataList = dataList;
             this.DataAsk = dataAsk;
         }
 
@@ -32,30 +35,45 @@ namespace Uni_database_project.Student_Functions
             double grade = DataAsk.TakeGrade();
 
 
-            Data.Database.Add(new Student_Class(studentID, firstName, lastName, selectedGender, adress, PESEL_number, grade));
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("!!! Student Added !!!");
-            Console.ResetColor();
+            DataList.Database.Add(new Student_Class(studentID, firstName, lastName, selectedGender, adress, PESEL_number, grade));
+            ErrorMsg.StudentAdded();
         }
 
         public void RemoveStudent()
         {
-            Console.WriteLine(
+            while (true)
+            {
+                Console.WriteLine(
                 "_____________________________\n" +
                 "Enter student's ID to remove: ");
-            int searchID = Convert.ToInt32(Console.ReadLine());
-
-            int DeleteIndex = 0;
-
-            foreach (var student in Data.Database)
-            {
-                if (student.StudentID == searchID)
+                int searchID;
+                if (!int.TryParse(Console.ReadLine(), out searchID))
                 {
-                    DeleteIndex = Data.Database.IndexOf(student);
+                    ErrorMsg.Incorrectinput();
+                    continue;
                 }
+
+                if (!DataList.Database.Any(student => student.StudentID == searchID))
+                {
+                    ErrorMsg.NoMatchingStudentFound();
+                    continue;
+                }
+
+                int DeleteIndex = 0;
+
+                foreach (var student in DataList.Database)
+                {
+                    if (student.StudentID == searchID)
+                    {
+                        DeleteIndex = DataList.Database.IndexOf(student);
+                    }
+                }
+
+                DataList.Database.RemoveAt(DeleteIndex);
+
+                break;
             }
 
-            Data.Database.RemoveAt(DeleteIndex);
         }
 
     }

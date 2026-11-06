@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using Uni_database_project.Classes;
 using Uni_database_project.Database_Operations;
+using Uni_database_project.Main_Functions;
 
 namespace Uni_database_project.Student_Functions
 {
     public class Student_Data_Ask
     {
-        private Student_List Data;
+        private ErrorMessages ErrorMsg;
+        private Student_List DataList;
 
-        public Student_Data_Ask(Student_List data)
+        public Student_Data_Ask(ErrorMessages errorMsg, Student_List dataList)
         {
-            this.Data = data;
+            this.ErrorMsg = errorMsg;
+            this.DataList = dataList;
         }
 
         public string TakeFistName()
@@ -27,9 +30,7 @@ namespace Uni_database_project.Student_Functions
 
                 if (string.IsNullOrWhiteSpace(firstName))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! First name cannot be empty !!!");
-                    Console.ResetColor();
+                    ErrorMsg.FieldIsEmpty();
                     continue;
                 }
 
@@ -50,9 +51,7 @@ namespace Uni_database_project.Student_Functions
 
                 if (string.IsNullOrWhiteSpace(lastName))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Last name cannot be empty !!!");
-                    Console.ResetColor();
+                    ErrorMsg.FieldIsEmpty();
                     continue;
                 }
                 return lastName;
@@ -86,9 +85,7 @@ namespace Uni_database_project.Student_Functions
                 {
                     return selectedGender;
                 }
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("!!! Invalid Choice. Please enter a listed option !!!");
-                Console.ResetColor();
+                ErrorMsg.WrongChoiceInput();
             }
 
         }
@@ -105,9 +102,7 @@ namespace Uni_database_project.Student_Functions
 
                 if (string.IsNullOrWhiteSpace(adress))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Adress cannot be empty !!!");
-                    Console.ResetColor();
+                    ErrorMsg.FieldIsEmpty();
                     continue;
                 }
 
@@ -124,32 +119,24 @@ namespace Uni_database_project.Student_Functions
                         "Enter student's ID: "
                         );
                 int studentID;
-                while (!int.TryParse(Console.ReadLine(), out studentID))
+                if (!int.TryParse(Console.ReadLine(), out studentID))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Wrong input for ID! try again !!!");
-                    Console.ResetColor();
+                    ErrorMsg.Incorrectinput();
                     continue;
                 }
 
                 if (int.IsNegative(studentID))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! ID cannot be negative !!!");
-                    Console.ResetColor();
+                    ErrorMsg.ValueIsNegative();
                     continue;
                 }
 
-                foreach (var student in Data.Database)
+                if (DataList.Database.Any(student => student.StudentID == studentID))
                 {
-                    if (student.StudentID == studentID)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("!!! ID matches already existing one !!!");
-                        Console.ResetColor();
-                        continue;
-                    }
+                    ErrorMsg.AlreadyExists();
+                    continue;
                 }
+
                 return studentID;
             }
         }
@@ -161,22 +148,24 @@ namespace Uni_database_project.Student_Functions
                 Console.WriteLine(
                         "___________________\n" +
                         "Enter student's Grade: " +
-                        "(use coma as divider)"
+                        "(use coma as divider, grade step 0.5)"
                         );
                 double grade;
-                while (!double.TryParse(Console.ReadLine(), out grade))
+                if (!double.TryParse(Console.ReadLine(), out grade))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Wrong input for Grade! try again !!!");
-                    Console.ResetColor();
+                    ErrorMsg.Incorrectinput();
+                    continue;
+                }
+
+                if (!(grade == 1 || grade == 2 || grade == 3 || grade == 3.5 || grade == 4 || grade == 4.5 || grade == 5))
+                {
+                    ErrorMsg.InvalidGrade();
                     continue;
                 }
 
                 if (double.IsNegative(grade))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Grade cannot be negative !!!");
-                    Console.ResetColor();
+                    ErrorMsg.ValueIsNegative();
                     continue;
                 }
                 return grade;
@@ -185,6 +174,7 @@ namespace Uni_database_project.Student_Functions
 
         public string TakePESEL()
         {
+
             while (true)
             {
                 Console.WriteLine(
@@ -195,21 +185,14 @@ namespace Uni_database_project.Student_Functions
                 bool onlyNumbers = PESEL_number.All(char.IsDigit);
                 if (!onlyNumbers)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Incorrect input! the string contains non numbers !!!");
-                    Console.ResetColor();
+                    ErrorMsg.Incorrectinput();
                     continue;
                 }
 
-                foreach (var student in Data.Database)
+                if (DataList.Database.Any(stuent => stuent.PESEL_Number == PESEL_number))
                 {
-                    if (student.PESEL_Number == PESEL_number)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("!!! PESEL matches already existing one !!!");
-                        Console.ResetColor();
-                        continue;
-                    }
+                    ErrorMsg.AlreadyExists();
+                    continue;
                 }
 
                 if (CheckPESEL(PESEL_number) == true)
@@ -226,9 +209,7 @@ namespace Uni_database_project.Student_Functions
 
             if (pesel.Length != 11)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("!!! PESEL number is too short/long !!!");
-                Console.ResetColor();
+                ErrorMsg.PESELIncorrectLength();
                 return false;
 
             }
@@ -243,18 +224,14 @@ namespace Uni_database_project.Student_Functions
             long Key = Convert.ToInt64(PESEL_number);
             int KeyCheck = Convert.ToInt32(sum % 10);
 
-            if (KeyCheck != (10 - Key % 10))
+            if (KeyCheck != (10 - Key % 10) % 10)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("!!! PESEL number is incorrect !!!");
-                Console.ResetColor();
+                ErrorMsg.PESELIsWrong();
                 return false;
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("!!! PESEL number set up correctly !!!");
-                Console.ResetColor();
+                ErrorMsg.PESELIsCorrect();
                 return true;
             }
         }

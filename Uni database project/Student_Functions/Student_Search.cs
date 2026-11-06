@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using Uni_database_project.Classes;
 using Uni_database_project.Database_Operations;
+using Uni_database_project.Main_Functions;
 
 namespace Uni_database_project.Student_Functions
 {
     public class Student_Search
     {
-        private Student_List Data;
+        private ErrorMessages ErrorMsg;
+        private Student_List DataList;
 
-        public Student_Search(Student_List data)
+        public Student_Search(ErrorMessages errorMsg, Student_List dataList)
         {
-            this.Data = data;
+            this.ErrorMsg = errorMsg;
+            this.DataList = dataList;
         }
         public void ShowStudents()
         {
 
-            if (Data.Database.Count == 0)
+            if (DataList.Database.Count == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("!!! No students found !!!");
-                Console.ResetColor();
+                ErrorMsg.NoStudentDataFound();
                 return;
             }
 
@@ -29,7 +30,7 @@ namespace Uni_database_project.Student_Functions
                             "______________\n" +
                             "Found Students:");
 
-            foreach (var student in Data.Database)
+            foreach (var student in DataList.Database)
             {
                 DisplayInfo(student);
             }
@@ -46,13 +47,11 @@ namespace Uni_database_project.Student_Functions
 
                 if(string.IsNullOrWhiteSpace(searchPESEL))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! Stirng cannot be empty !!!");
-                    Console.ResetColor();
+                    ErrorMsg.FieldIsEmpty();
                     continue;
                 }
 
-                foreach (var student in Data.Database)
+                foreach (var student in DataList.Database)
                 {
                     if (student.PESEL_Number == searchPESEL)
                     {
@@ -77,13 +76,11 @@ namespace Uni_database_project.Student_Functions
 
                 if (string.IsNullOrWhiteSpace(searchName))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("!!! First name cannot be empty !!!");
-                    Console.ResetColor();
+                    ErrorMsg.FieldIsEmpty();
                     continue;
                 }
 
-                foreach (var student in Data.Database)
+                foreach (var student in DataList.Database)
                 {
                     if (student.LastName == searchName)
                     {
